@@ -5,7 +5,8 @@ from langgraph.graph import StateGraph, START, END
 
 # We will use this model for both the conversation and the summarization
 from langchain_openai import ChatOpenAI
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+from langchain_google_genai import ChatGoogleGenerativeAI
+model = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0)
 
 # State class to store messages and summary
 class State(MessagesState):
