@@ -1,12 +1,14 @@
 from langchain_core.messages import SystemMessage
 from langchain_core.runnables.config import RunnableConfig
 from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.store.base import BaseStore
 import configuration
 
 # Initialize the LLM
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+# model = ChatOpenAI(model="gpt-4o", temperature=0)
+model = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0)
 
 # Chatbot instruction
 MODEL_SYSTEM_MESSAGE = """You are a helpful assistant with memory that provides information about the user. 
@@ -88,7 +90,7 @@ def write_memory(state: MessagesState, config: RunnableConfig, store: BaseStore)
         
     # Format the memory in the system prompt
     system_msg = CREATE_MEMORY_INSTRUCTION.format(memory=existing_memory_content)
-    new_memory = model.invoke([SystemMessage(content=system_msg)]+state['messages'])
+    new_memory = model.invoke([SystemMessage(content=system_msg)]+state['messages'][:-1])
 
     # Overwrite the existing memory in the store 
     key = "user_memory"
